@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "matriculas",
+  "info": {
+    "singularName": "matricula",
+    "pluralName": "matriculas",
+    "displayName": "Matricula"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Fecha_matricula": {
+      "type": "date",
+      "required": true
+    },
+    "fk_id_curso": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::curso.curso"
+    },
+    "fk_idEstudiante": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::estudiante.estudiante"
+    }
+  }
+}

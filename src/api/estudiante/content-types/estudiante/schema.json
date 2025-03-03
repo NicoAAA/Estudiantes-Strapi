@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "estudiantes",
+  "info": {
+    "singularName": "estudiante",
+    "pluralName": "estudiantes",
+    "displayName": "Estudiante"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Nombre": {
+      "type": "string",
+      "required": true
+    },
+    "Apellido": {
+      "type": "string",
+      "required": true
+    },
+    "Fecha_nacimiento": {
+      "type": "date",
+      "required": true
+    },
+    "Email": {
+      "type": "email",
+      "required": true
+    },
+    "Telefono": {
+      "type": "string",
+      "required": true,
+      "maxLength": 20
+    }
+  }
+}

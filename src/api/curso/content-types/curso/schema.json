@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cursos",
+  "info": {
+    "singularName": "curso",
+    "pluralName": "cursos",
+    "displayName": "Curso"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Nombre_curso": {
+      "type": "string",
+      "required": true
+    },
+    "Descripcion": {
+      "type": "text",
+      "required": true
+    },
+    "Fecha_inicio": {
+      "type": "date",
+      "required": true
+    },
+    "Fecha_fin": {
+      "type": "date",
+      "required": true
+    },
+    "Creditos": {
+      "type": "decimal",
+      "required": true,
+      "max": 10,
+      "unique": false,
+      "min": 0
+    }
+  }
+}
