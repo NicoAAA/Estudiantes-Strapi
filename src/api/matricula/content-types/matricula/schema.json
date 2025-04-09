@@ -23,6 +23,10 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::estudiante.estudiante"
+    },
+    "periodo": {
+      "type": "string",
+      "required": true
     }
   }
 }

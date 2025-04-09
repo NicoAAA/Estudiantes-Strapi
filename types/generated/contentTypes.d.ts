@@ -380,6 +380,7 @@ export interface ApiCursoCurso extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    capacidadMaxima: Schema.Attribute.Integer & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -468,6 +469,7 @@ export interface ApiMatriculaMatricula extends Struct.CollectionTypeSchema {
       'api::matricula.matricula'
     > &
       Schema.Attribute.Private;
+    periodo: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

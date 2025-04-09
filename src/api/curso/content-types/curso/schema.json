@@ -32,6 +32,11 @@
       "max": 10,
       "unique": false,
       "min": 0
+    },
+    "capacidadMaxima": {
+      "type": "integer",
+      "required": true
     }
+
   }
 }
