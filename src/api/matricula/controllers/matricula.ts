@@ -6,22 +6,29 @@ import { factories } from '@strapi/strapi'
 import axios from 'axios';
 
 
-const functionListaEstudiantes = async (ctx, dataArray) => {
+const procesarRespuestaListaEstudiantes = async (ctx, dataArray) => {
     try {
-        const data = dataArray.data.data;
-        console.log("Respuesta de matriculas:", dataArray.data.data);
-        ctx.body = {
-            message: `Lista de estudiantes matriculados en el curso`,
-            estudiantes: data.map(item => item.fk_idEstudiante)
-        };
+      // Verificar que la estructura de la respuesta es la esperada
+      if (!dataArray?.data?.data) {
+        return ctx.throw(500, 'La respuesta de la API no tiene el formato esperado.');
+      }
+      const data = dataArray.data.data;
+      console.log("Respuesta de matriculas:", data);
+      ctx.body = {
+        message: 'Lista de estudiantes matriculados en el curso',
+        estudiantes: data.map(item => item.fk_idEstudiante)
+      };
     } catch (error) {
-        ctx.throw(500, 'ERROR: No se pudo obtener la lista de estudiantes.');
+      ctx.throw(500, 'ERROR: No se pudo obtener la lista de estudiantes.');
     }
-};
-
+  };
 
 const functionContarEstudiantes = async (ctx, dataArray) => {
     try {
+        // Verificar la estructura del body
+        if (!dataArray?.data?.data) {
+          return ctx.throw(500, 'La respuesta de la API no tiene el formato esperado.');
+        }
         const totalEstudiantes = dataArray.data.data.length;
         ctx.body = {
             message: `Cantidad de estudiantes matriculados: ${totalEstudiantes}`
@@ -129,64 +136,71 @@ export default factories.createCoreController('api::matricula.matricula',({ stra
         }
       },
 
-    async listaEstudiantes(ctx) {
+      async listaEstudiantes(ctx) {
         console.log("Endpoint /api/matriculas/listaEstudiantes");
-
+    
+        // Validar existencia del token de autorización
         const token = ctx.request.headers.authorization?.split(" ")[1];
         if (!token) {
-            return ctx.unauthorized("Token no incluido en la petición");
+          return ctx.unauthorized("Token no incluido en la petición");
         }
-
-        const { cursoId } = ctx.params; // Obtener el ID del curso desde la URL
+    
+        // Extraer documentId desde el body
+        const { data: { documentId } = { documentId: null } } = ctx.request.body;
+        if (!documentId) {
+          return ctx.throw(400, "ERROR: El documentId del curso es requerido en el body");
+        }
+    
         let dataArray;
         try {
-            dataArray = await axios.get(
-                `http://localhost:1337/api/matriculas?populate[0]=fk_id_curso&populate[1]=fk_idEstudiante&filters[fk_id_curso][documentId][$eq]=${cursoId}`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
-                }
-                
-            );
+          dataArray = await strapi.db.query('api::matricula.matricula').findMany({
+            where: {
+              fk_id_curso: {
+                documentId: documentId  // o la condición que corresponda
+              }
+            },
+            populate: ['fk_id_curso', 'fk_idEstudiante']
+          });
         } catch (error) {
-            return ctx.unauthorized("ERROR: Token inválido o sin permisos");
+          return ctx.unauthorized("ERROR: Token inválido o sin permisos");
         }
-
+    
         try {
-            await functionListaEstudiantes(ctx, dataArray);
+          await procesarRespuestaListaEstudiantes(ctx, { data: { data: dataArray } });
         } catch (error) {
-            ctx.throw(500, "Error: No se pudo procesar la solicitud.");
+          ctx.throw(500, "Error: No se pudo procesar la solicitud.");
         }
-    },
+      },
     // Contar cuántos estudiantes están matriculados en un curso específico
     async contarEstudiantes(ctx) {
         console.log("Endpoint /api/matriculas/contarEstudiantes");
 
+        // Validar existencia del token de autorización
         const token = ctx.request.headers.authorization?.split(" ")[1];
         if (!token) {
-            return ctx.unauthorized("Token no incluido en la petición");
+          return ctx.unauthorized("Token no incluido en la petición");
+        }
+    
+        // Extraer documentId desde el body
+        const { data: { documentId } = { documentId: null } } = ctx.request.body;
+        if (!documentId) {
+          return ctx.throw(400, "ERROR: El documentId del curso es requerido en el body");
         }
 
-        const { cursoId } = ctx.params;
-        let dataArray;
+        let dataArray
         try {
-            dataArray = await axios.get(
-                `http://localhost:1337/api/matriculas?filters[fk_id_curso]=${cursoId}`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
+            dataArray = await strapi.db.query('api::matricula.matricula').findMany({
+              where: {
+                fk_id_curso:{ documentId: documentId}
+              },
+              populate: ['fk_id_curso', 'fk_idEstudiante']
+            })
         } catch (error) {
             return ctx.unauthorized("ERROR: Token inválido o sin permisos");
         }
 
         try {
-            await functionContarEstudiantes(ctx, dataArray);
+            await functionContarEstudiantes(ctx, { data: { data: dataArray } });
         } catch (error) {
             ctx.throw(500, "Error: No se pudo procesar la solicitud.");
         }
@@ -201,18 +215,19 @@ export default factories.createCoreController('api::matricula.matricula',({ stra
             return ctx.unauthorized("Token no incluido en la petición");
         }
 
-        const { estudianteId } = ctx.params;
+        const { documentId } = ctx.params;
         let dataArray;
         try {
-            dataArray = await axios.get(
-                `http://localhost:1337/api/matriculas?filters[fk_idEstudiante]=${estudianteId}`,
+            dataArray = await axios.post(
+                `http://localhost:1337/api/matriculas/listaEstudiantes/`,
+                { data: { documentId } },
                 {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
+                  headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                  }
                 }
-            );
+              );
         } catch (error) {
             return ctx.unauthorized("ERROR: Token inválido o sin permisos");
         }

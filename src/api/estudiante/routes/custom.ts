@@ -1,8 +1,8 @@
 console.log('Cargando rutas personalizadas para estudiante');
 export default [
   {
-    method: 'GET',
-    path: '/api/estudiantes/:id/cursosInscrito',
+    method: 'POST',
+    path: '/api/estudiantes/cursosInscrito',
     handler: 'api::estudiante.estudiante.cursosInscrito',
     config: {
       auth: false,

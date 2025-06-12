@@ -12,19 +12,19 @@ export default {
       },
     },
     {
-      method: 'GET',
-      path: '/matriculas/listaEstudiantes/:cursoId',
-      handler: 'api::matricula.matricula.listaEstudiantes',
+      method: 'POST',
+      path: '/matriculas/listaEstudiantes',
+      handler: 'matricula.listaEstudiantes', // Asegúrate de que este método exista en el controlador
       config: {
         auth: false,
         policies: [],
         middlewares: [],
       },
-    },
+    },   
     {
-      method: 'GET',
-      path: '/matriculas/contarEstudiantes/:cursoId',
-      handler: 'api::matricula.matricula.contarEstudiantes',
+      method: 'POST',
+      path: '/matriculas/contarEstudiantes',
+      handler: 'matricula.contarEstudiantes',
       config: {
         auth: false,
         policies: [],
