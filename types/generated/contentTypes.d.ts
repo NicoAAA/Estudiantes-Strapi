@@ -410,6 +410,7 @@ export interface ApiCursoCurso extends Struct.CollectionTypeSchema {
 export interface ApiEstudianteEstudiante extends Struct.CollectionTypeSchema {
   collectionName: 'estudiantes';
   info: {
+    description: '';
     displayName: 'Estudiante';
     pluralName: 'estudiantes';
     singularName: 'estudiante';
@@ -430,6 +431,9 @@ export interface ApiEstudianteEstudiante extends Struct.CollectionTypeSchema {
       'api::estudiante.estudiante'
     > &
       Schema.Attribute.Private;
+    n_Documento: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     Nombre: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     Telefono: Schema.Attribute.String &

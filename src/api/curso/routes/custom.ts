@@ -1,8 +1,8 @@
 console.log('Cargando rutas personalizadas');
 export default [
   {
-    method: 'GET',
-    path: '/api/cursos/:id/countMatriculados',
+    method: 'POST',
+    path: '/api/cursos/countMatriculados',
     handler: 'api::curso.curso.countMatriculados',
     config: {
       auth: false,
@@ -11,8 +11,8 @@ export default [
     },
   },
   {
-    method: 'GET',
-    path: '/api/cursos/:id/listaEstudiantes',
+    method: 'POST',
+    path: '/api/cursos/listaEstudiantes',
     handler: 'api::curso.curso.listaEstudiantes',
     config: {
       auth: false,

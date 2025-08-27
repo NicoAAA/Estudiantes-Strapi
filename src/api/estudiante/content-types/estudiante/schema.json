@@ -4,7 +4,8 @@
   "info": {
     "singularName": "estudiante",
     "pluralName": "estudiantes",
-    "displayName": "Estudiante"
+    "displayName": "Estudiante",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -30,6 +31,11 @@
       "type": "string",
       "required": true,
       "maxLength": 20
+    },
+    "n_Documento": {
+      "type": "string",
+      "required": true,
+      "unique": true
     }
   }
 }
